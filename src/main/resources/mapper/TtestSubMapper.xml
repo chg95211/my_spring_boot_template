@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsk.template.dao.TtestSubDao">
+    <resultMap id="subWithTest" type="com.zsk.template.model.TtestSub">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="ttestId" property="ttestId"/>
+        <association property="ttest" javaType="com.zsk.template.model.Ttest">
+            <id column="t_id" property="id"/>
+            <result column="t_status" property="status"/>
+        </association>
+
+    </resultMap>
+    <select id="getSubWithTest" parameterType="java.lang.Integer" resultMap="subWithTest">
+        select ttest_sub.*,
+               ttest.id     as t_id,
+               ttest.status as t_status
+        from ttest_sub
+                 left join ttest
+                           on ttest_sub.ttest_id = ttest.id
+        where ttest_sub.id = #{id}
+    </select>
+</mapper>

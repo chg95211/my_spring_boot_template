@@ -1,0 +1,2 @@
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#com.zsk.template.config.redis.RedisClusterConfig,com.zsk.template.config.redis.RedisSingleConfig

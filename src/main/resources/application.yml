@@ -1,0 +1,140 @@
+#spring boot
+spring:
+  messages:
+    basename: i18n/messages,i18n/pages
+  application:
+    name: my-spring-boot-template
+  #datasource
+  datasource:
+    #    driver-class-name: com.mysql.jdbc.Driver
+    #    url: jdbc:mysql://127.0.0.1:3306/tao_dubbo
+    #    username: root
+    #    password: zskroot
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test
+    username: zsk
+    password: zskroot
+    filters: stat,wall,log4j                    # druid监控
+    dbcp2:
+      min-idle: 5                               # 最小连接数
+      initial-size: 5                           # 初始化连接数
+      max-total: 5                              # 最大连接数
+      max-wait-millis: 200                      # 等待链接获取的最大超时时间
+  data:
+    elasticsearch:
+      cluster-name: myes
+      cluster-nodes: localhost:9300
+  #      properties:
+  #        path:
+  #          logs: ./elasticsearch/log
+  #          data: ./elasticseach/data
+  mail:
+    host: smtp.qq.com
+    username: shengkunz@qq.com
+    password: sss
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    check-template: true
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
+    mode: HTML5
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 10MB #单个文件
+      max-request-size: 20MB #所有文件大小
+  # rabbitmq
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    #使用confirms代替transaction,防止吞吐量下降
+    #生产者防止消息丢失
+    publisher-confirms: true
+
+#server
+server:
+  port: 8000
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-alias: tomcat
+#    key-password: zskroot
+#    key-store-type: PKCS12
+#    enabled: true
+#    protocol: TLS
+#mybatis
+mybatis:
+  type-aliases-package: com.zsk.template.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+#mapper
+mapper:
+  mappers: com.zsk.template.util.MyMapper
+  not-empty: false
+
+
+
+#日志打印配置
+logging:
+  config: classpath:logback.xml
+#  level:
+#    com.paic.ucmdb.search.dao: debug
+#    com.paic.ucmdb.search.util: debug
+#  # 日志存放目录 默认当前根目录
+#    path: /var/tmp
+#  # 日志存放全路径 文件名
+#  file: ucmdb-search.log
+
+#redis
+redis:
+  single:
+    active: true
+    maxTotal: 30
+    maxIdle: 10
+    numTestsPerEvictionRun: 1024
+    timeBetweenEvictionRunsMillis: 30000
+    minEvictableIdleTimeMillis: 1800000
+    softMinEvictableIdleTimeMillis: 10000
+    maxWaitMillis: 1500
+    testOnBorrow: true
+    testWhileIdle: true
+    blockWhenExhausted: false
+    host: 127.0.0.1
+    port: 6379
+  cluster:
+    #    active: true
+    nodes:
+      - 127.0.0.1:7000
+      - 127.0.0.1:7001
+      - 127.0.0.1:7002
+      - 127.0.0.1:7003
+      - 127.0.0.1:7004
+      - 127.0.0.1:7005
+
+
+DEBUG_MODE: true
+
+
+#elastic-job 配置
+elasticjob:
+  server-lists: 127.0.0.1:2181
+  namespace: es-sync-schedule
+
+simpleJob:
+  # 5s调度一次
+  cron: 0/5 * * * * ?
+  # 总分片数和分片项
+  shardingTotalCount: 2
+  shardingItemParameters: 0=type0,1=type1
+
