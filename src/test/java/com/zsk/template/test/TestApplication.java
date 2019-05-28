@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -130,6 +131,14 @@ public class TestApplication
         System.out.println("需要有es dao和 model类才会自动创建");
     }
 
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
+
+    @Test
+    public void testElasticsearchTemplate()
+    {
+        elasticsearchTemplate.refresh(Ttest.class);
+    }
 
     @Test
     public void testSaveIndex()

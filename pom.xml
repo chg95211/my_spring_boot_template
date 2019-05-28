@@ -50,10 +50,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-<!--        elsticsearch-->
+        <!--        elsticsearch-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!--shield-->
+
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>shield</artifactId>
+            <version>2.4.6</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/shield-2.4.6.jar</systemPath>
         </dependency>
         <!--mysql-->
         <!--        <dependency>-->
@@ -197,45 +207,45 @@
         </dependency>
 
         <!--elastic job-->
-<!--        <dependency>-->
-<!--            <groupId>com.dangdang</groupId>-->
-<!--            <artifactId>elastic-job-lite-core</artifactId>-->
-<!--            <version>2.1.5</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>curator-client</artifactId>-->
-<!--                    <groupId>org.apache.curator</groupId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>curator-framework</artifactId>-->
-<!--                    <groupId>org.apache.curator</groupId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>curator-recipes</artifactId>-->
-<!--                    <groupId>org.apache.curator</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.dangdang</groupId>-->
-<!--            <artifactId>elastic-job-lite-spring</artifactId>-->
-<!--            <version>2.1.5</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.curator</groupId>-->
-<!--            <artifactId>curator-framework</artifactId>-->
-<!--            <version>2.10.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.curator</groupId>-->
-<!--            <artifactId>curator-client</artifactId>-->
-<!--            <version>2.10.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.curator</groupId>-->
-<!--            <artifactId>curator-recipes</artifactId>-->
-<!--            <version>2.10.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.dangdang</groupId>-->
+        <!--            <artifactId>elastic-job-lite-core</artifactId>-->
+        <!--            <version>2.1.5</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>curator-client</artifactId>-->
+        <!--                    <groupId>org.apache.curator</groupId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>curator-framework</artifactId>-->
+        <!--                    <groupId>org.apache.curator</groupId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>curator-recipes</artifactId>-->
+        <!--                    <groupId>org.apache.curator</groupId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.dangdang</groupId>-->
+        <!--            <artifactId>elastic-job-lite-spring</artifactId>-->
+        <!--            <version>2.1.5</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.curator</groupId>-->
+        <!--            <artifactId>curator-framework</artifactId>-->
+        <!--            <version>2.10.0</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.curator</groupId>-->
+        <!--            <artifactId>curator-client</artifactId>-->
+        <!--            <version>2.10.0</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.curator</groupId>-->
+        <!--            <artifactId>curator-recipes</artifactId>-->
+        <!--            <version>2.10.0</version>-->
+        <!--        </dependency>-->
 
         <!--quartz-->
         <!--<dependency>-->
@@ -250,8 +260,8 @@
         <!--</dependency>-->
         <!--rabbitmq-->
         <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-amqp</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
         <!--cache-->
