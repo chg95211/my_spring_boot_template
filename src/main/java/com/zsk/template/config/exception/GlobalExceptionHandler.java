@@ -28,7 +28,7 @@ public class GlobalExceptionHandler
     @ResponseBody
     public Response parameterException(ParameterException e)
     {
-        log.error("参数错误{}", e);
+        log.error("参数错误", e);
         return Response.fail(e.getMessage());
     }
 
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler
     @ResponseBody
     public Response exceptionHandler(Exception e)
     {
-        log.error("系统异常{}", e);
+        log.error("系统异常", e);
         if (DEBUG_MODE)
         {
             return Response.fail(e.getMessage());

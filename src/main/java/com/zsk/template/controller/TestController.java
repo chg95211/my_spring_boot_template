@@ -1,5 +1,7 @@
 package com.zsk.template.controller;
 
+import com.zsk.template.dao.TtestDao;
+import com.zsk.template.model.Ttest;
 import com.zsk.template.model.response.Response;
 import com.zsk.template.service.TestService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -28,6 +31,17 @@ public class TestController
 {
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private TtestDao ttestDao;
+
+    @PostMapping("/addTtest")
+    public Object addTtest(@RequestBody Ttest ttest)
+    {
+        this.ttestDao.insertSelective(ttest);
+
+        return this.ttestDao.selectByPrimaryKey(0);
+    }
 
     @ApiOperation(value = "test", notes = "test test")
     @ApiImplicitParams({

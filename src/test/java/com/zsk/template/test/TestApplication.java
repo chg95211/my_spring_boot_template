@@ -3,6 +3,8 @@ package com.zsk.template.test;
 import com.zsk.template.Application;
 import com.zsk.template.config.exception.ParameterException;
 import com.zsk.template.config.mq.LogSearchSender;
+import com.zsk.template.constant.TtestStatus;
+import com.zsk.template.controller.TestController;
 import com.zsk.template.dao.TtestDao;
 import com.zsk.template.dao.TtestSubDao;
 import com.zsk.template.dao.es.TTestEsDao;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -38,8 +41,11 @@ import java.util.Date;
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@WebMvcTest
 public class TestApplication
 {
+
+
     @Resource
     DataSource dataSource;
 
@@ -98,6 +104,35 @@ public class TestApplication
 
     @Autowired
     private TtestDao ttestDao;
+
+    @Test
+    public void testEnum()
+    {
+        Ttest ttest = this.ttestDao.selectByPrimaryKey(1);
+        System.out.println(ttest);
+    }
+
+
+    @Test
+    public void testEnum2()
+    {
+        Ttest ttest = new Ttest();
+        ttest.setId(4);
+        ttest.setStatus(TtestStatus.closed);
+        this.ttestDao.insertSelective(ttest);
+
+    }
+
+
+    @Test
+    public void testEnum3()
+    {
+        Ttest ttest = new Ttest();
+        ttest.setId(5);
+        ttest.setStatus(TtestStatus.closed);
+        this.ttestDao.insertRecode(ttest);
+
+    }
 
     @Test
     public void testPostgreJson()

@@ -1,5 +1,8 @@
 package com.zsk.template.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.EnumDeserializer;
+import com.zsk.template.constant.TtestStatus;
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -21,8 +24,9 @@ public class Ttest
     @Id
     @org.springframework.data.annotation.Id
     private Integer id;
+    @Column(name = "status")
     @Field(type = FieldType.String,analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
-    private String status;
+    private TtestStatus status;
 
     @Transient
     private String subs;
