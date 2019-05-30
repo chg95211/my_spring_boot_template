@@ -3,38 +3,29 @@ package com.zsk.template.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.zsk.template.config.date.CustomDateDeserializer;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.Date;
 
 /**
  * @description:
  * @author: zsk
- * @create: 2019-05-15 23:36
+ * @create: 2019-05-30 22:50
  **/
-@Entity
-@Table(name = "tb_item")
-public class TbItem
+@Data
+@Table(name = "tao_miaosha", schema = "tao", catalog = "")
+public class TaoMiaosha
 {
     @Id
     private Long id;
-    private String title;
-    private String sellPoint;
-    private Long price;
-    private Integer num;
-    private String barcode;
-    private String image;
-    private Long cid;
-    private Byte status;
-
+    private Long goodsId;
+    private Integer price;
+    private Integer stockCount;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @JsonDeserialize(using = CustomDateDeserializer.class)
-    private LocalDateTime created;
-
+    private Date startDate;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @JsonDeserialize(using = CustomDateDeserializer.class)
-    private LocalDateTime updated;
-
+    private Date endDate;
 }

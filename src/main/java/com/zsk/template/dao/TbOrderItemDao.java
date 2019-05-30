@@ -1,6 +1,5 @@
 package com.zsk.template.dao;
 
-import com.zsk.template.model.TbItem;
 import com.zsk.template.model.TbOrderItem;
 import com.zsk.template.util.MyMapper;
 import org.springframework.stereotype.Repository;

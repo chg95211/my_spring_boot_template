@@ -51,7 +51,8 @@ public class RedisSingleConfig
     @Bean
     public JedisPool jedisPool()
     {
-        return new JedisPool(jedisPoolConfig(), redisProperties.getHost(), redisProperties.getPort());
+//        GenericObjectPoolConfig poolConfig, String host, int port, int timeout, String password
+        return new JedisPool(jedisPoolConfig(), redisProperties.getHost(), redisProperties.getPort(),redisProperties.getTimeout(),redisProperties.getPassword());
     }
 
 }

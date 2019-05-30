@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  **/
 @Document(indexName = "tb_user",type = "tb_user",shards = 1,replicas = 1)
 @Data
-@Table(name = "tb_user", schema = "tao_dubbo", catalog = "")
+@Table(name = "tb_user")
 public class TbUser implements Serializable
 {
     @Id
@@ -28,12 +28,12 @@ public class TbUser implements Serializable
     private String password;
     private String phone;
     private String email;
-    @JsonDeserialize(using = CustomDateDeserializer.class)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime created;
-    @JsonDeserialize(using = CustomDateDeserializer.class)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime updated;
+//    @JsonDeserialize(using = CustomDateDeserializer.class)
+//    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+//    private LocalDateTime created;
+//    @JsonDeserialize(using = CustomDateDeserializer.class)
+//    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+//    private LocalDateTime updated;
     private Integer level;
     private String collection;
     private String perms;

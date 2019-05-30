@@ -6,14 +6,14 @@ spring:
     name: my-spring-boot-template
   #datasource
   datasource:
-    #    driver-class-name: com.mysql.jdbc.Driver
-    #    url: jdbc:mysql://127.0.0.1:3306/tao_dubbo
-    #    username: root
-    #    password: zskroot
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/test
-    username: zsk
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/tao
+    username: root
     password: zskroot
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/test
+#    username: zsk
+#    password: zskroot
     filters: stat,wall,log4j                    # druid监控
     dbcp2:
       min-idle: 5                               # 最小连接数
@@ -112,6 +112,8 @@ redis:
     blockWhenExhausted: false
     host: 127.0.0.1
     port: 6379
+    password: zskroot
+    timeout: 5000
   cluster:
     #    active: true
     nodes:

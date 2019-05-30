@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @create: 2019-05-15 23:36
  **/
 @Entity
-@Table(name = "tb_order", schema = "tao_dubbo", catalog = "")
+@Table(name = "tb_order")
 public class TbOrder
 {
     @Id

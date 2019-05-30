@@ -25,6 +25,18 @@ public class RedisSingleProperties
     private String host;
     private Integer port;
     private Boolean active;
+    private String password;
+    private Integer timeout;
+
+    public Integer getTimeout()
+    {
+        return timeout;
+    }
+
+    public void setTimeout(Integer timeout)
+    {
+        this.timeout = timeout;
+    }
 
     public Integer getMaxTotal()
     {
@@ -154,5 +166,15 @@ public class RedisSingleProperties
     public void setActive(Boolean active)
     {
         this.active = active;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 }

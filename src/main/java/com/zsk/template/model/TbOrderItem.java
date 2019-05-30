@@ -12,7 +12,7 @@ import java.util.Objects;
  **/
 @Entity
 @Data
-@Table(name = "tb_order_item", schema = "tao_dubbo", catalog = "")
+@Table(name = "tb_order_item")
 public class TbOrderItem
 {
     @Id

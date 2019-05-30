@@ -110,6 +110,7 @@ public class ShiroConfig
         filterMap.put("/page/unAuth", "anon");
         filterMap.put("/druid/**", "anon");
         filterMap.put("/test/*", "authc");
+        filterMap.put("/miaosha/*", "authc");
         filterMap.put("/test", "perms[user:list]");//可以用注解完成，当然注意若是有transaction注解那么夹在controller层好
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //登录url
