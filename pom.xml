@@ -50,21 +50,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <!--        elsticsearch-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <!--shield-->
+<!--        &lt;!&ndash;        elsticsearch&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;shield&ndash;&gt;-->
 
-        <dependency>
-            <groupId>org.elasticsearch.plugin</groupId>
-            <artifactId>shield</artifactId>
-            <version>2.4.6</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/shield-2.4.6.jar</systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.elasticsearch.plugin</groupId>-->
+<!--            <artifactId>shield</artifactId>-->
+<!--            <version>2.4.6</version>-->
+<!--            <type>jar</type>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${basedir}/lib/shield-2.4.6.jar</systemPath>-->
+<!--        </dependency>-->
         <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>

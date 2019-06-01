@@ -12,6 +12,8 @@ public interface JedisClient
 
     long incr(String key);
 
+    long decr(String key);
+
     long expire(String key, int second);
 
     long ttl(String key);

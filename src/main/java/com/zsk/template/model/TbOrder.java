@@ -3,6 +3,10 @@ package com.zsk.template.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.zsk.template.config.date.CustomDateDeserializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +16,10 @@ import java.time.LocalDateTime;
  * @author: zsk
  * @create: 2019-05-15 23:36
  **/
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Entity
 @Table(name = "tb_order")
 public class TbOrder

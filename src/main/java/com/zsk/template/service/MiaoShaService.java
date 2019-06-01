@@ -2,6 +2,8 @@ package com.zsk.template.service;
 
 import com.zsk.template.model.TaoMiaosha;
 
+import java.util.List;
+
 /**
  * @description:
  * @author: zsk
@@ -9,5 +11,9 @@ import com.zsk.template.model.TaoMiaosha;
  **/
 public interface MiaoShaService
 {
-    Object doMiaoSha(TaoMiaosha miaosha);
+    Object miaosha(TaoMiaosha miaosha);
+
+    List<TaoMiaosha> list();
+
+    void doMiaosha(TaoMiaosha order);
 }

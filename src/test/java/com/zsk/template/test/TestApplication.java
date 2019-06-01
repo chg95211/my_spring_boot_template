@@ -2,12 +2,12 @@ package com.zsk.template.test;
 
 import com.zsk.template.Application;
 import com.zsk.template.config.exception.ParameterException;
-import com.zsk.template.config.mq.LogSearchSender;
+//import com.zsk.template.config.mq.LogSearchSender;
 import com.zsk.template.constant.TtestStatus;
 import com.zsk.template.controller.TestController;
 import com.zsk.template.dao.TtestDao;
 import com.zsk.template.dao.TtestSubDao;
-import com.zsk.template.dao.es.TTestEsDao;
+//import com.zsk.template.dao.es.TTestEsDao;
 import com.zsk.template.model.SearchLog;
 import com.zsk.template.model.Ttest;
 import com.zsk.template.model.TtestSub;
@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+//import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -158,39 +158,39 @@ public class TestApplication
         System.out.println(subWithTest);
     }
 
-    @Autowired
-    private TTestEsDao tTestEsDao;
+//    @Autowired
+//    private TTestEsDao tTestEsDao;
 
     @Test
     public void testCreateIndex(){
         System.out.println("需要有es dao和 model类才会自动创建");
     }
 
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+//    @Autowired
+//    private ElasticsearchTemplate elasticsearchTemplate;
 
-    @Test
-    public void testElasticsearchTemplate()
-    {
-        elasticsearchTemplate.refresh(Ttest.class);
-    }
+//    @Test
+//    public void testElasticsearchTemplate()
+//    {
+//        elasticsearchTemplate.refresh(Ttest.class);
+//    }
 
-    @Test
-    public void testSaveIndex()
-    {
-        Ttest ttestWithSubs2 = ttestDao.getTtestWithSubs2(1);
-        tTestEsDao.save(ttestWithSubs2);
-    }
+//    @Test
+//    public void testSaveIndex()
+//    {
+//        Ttest ttestWithSubs2 = ttestDao.getTtestWithSubs2(1);
+//        tTestEsDao.save(ttestWithSubs2);
+//    }
 
-    @Autowired
-    private LogSearchSender logSearchSender;
-
-    @Autowired
-    private SnowflakeId snowflakeId;
-
-    @Test
-    public void testMq()
-    {
-        logSearchSender.sendLogSearchLogMsg(SearchLog.builder().id(String.valueOf(snowflakeId.nextId())).q("test").date(new Date()).build());
-    }
+//    @Autowired
+//    private LogSearchSender logSearchSender;
+//
+//    @Autowired
+//    private SnowflakeId snowflakeId;
+//
+//    @Test
+//    public void testMq()
+//    {
+//        logSearchSender.sendLogSearchLogMsg(SearchLog.builder().id(String.valueOf(snowflakeId.nextId())).q("test").date(new Date()).build());
+//    }
 }

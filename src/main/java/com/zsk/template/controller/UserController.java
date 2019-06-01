@@ -37,4 +37,10 @@ public class UserController
         return Response.success(this.userService.getById(id));
 
     }
+
+    @GetMapping("/info/{token}")
+    public Response getByToken(@PathVariable String token)
+    {
+        return Response.success(this.userService.getByToken(token));
+    }
 }

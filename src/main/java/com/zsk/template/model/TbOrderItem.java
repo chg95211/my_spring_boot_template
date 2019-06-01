@@ -1,6 +1,9 @@
 package com.zsk.template.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,8 +13,11 @@ import java.util.Objects;
  * @author: zsk
  * @create: 2019-05-15 23:36
  **/
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
+@Entity
 @Table(name = "tb_order_item")
 public class TbOrderItem
 {

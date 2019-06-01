@@ -24,6 +24,6 @@ public class MiaoShaController
     @PostMapping("/do")
     public Response doMiaoSha(@RequestBody TaoMiaosha miaosha)
     {
-        return Response.success(this.miaoShaService.doMiaoSha(miaosha));
+        return Response.success(this.miaoShaService.miaosha(miaosha));
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.zsk.template.config.date.CustomDateDeserializer;
 import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.Document;
+//import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @author: zsk
  * @create: 2019-05-11 17:20
  **/
-@Document(indexName = "tb_user",type = "tb_user",shards = 1,replicas = 1)
+//@Document(indexName = "tb_user",type = "tb_user",shards = 1,replicas = 1)
 @Data
 @Table(name = "tb_user")
 public class TbUser implements Serializable

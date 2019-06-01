@@ -5,7 +5,13 @@ import com.zsk.template.util.HttpUtil;
 import com.zsk.template.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionKey;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,17 +40,8 @@ public class UserInfoInterceptor implements HandlerInterceptor
         }
         if (StringUtils.isNotEmpty(token))
         {
-            Object principal = SecurityUtils.getSubject().getPrincipal();
-            if (principal instanceof TbUser)
-            {
-                ThreadLocalUser.setUser((TbUser) principal);
-                log.info("============用户已登录，登录用户为{}============", principal);
-            }
-            else
-            {
-                ThreadLocalUser.setUser(new TbUser());
-                log.info("============用户未登录============");
-            }
+            //Object principal = SecurityUtils.getSubject().getPrincipal();//only work in web env
+            ThreadLocalUser.setUser(doGetUserInfo(token));
         }
 
         //        //获取request header中user json
@@ -60,6 +57,27 @@ public class UserInfoInterceptor implements HandlerInterceptor
         //        //把存储到ThreaLocal中
         //        ThreadLocalUser.setUser(user);
         return true;
+    }
+
+    private TbUser doGetUserInfo(String token)
+    {
+        TbUser user = null;
+        SessionKey key = new DefaultSessionKey(token);
+        Session session = SecurityUtils.getSecurityManager().getSession(key);
+        if (session != null)
+        {
+            Object obj = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+            if (obj != null)
+            {
+                SimplePrincipalCollection collection = (SimplePrincipalCollection) obj;
+                user = (TbUser) collection.getPrimaryPrincipal();
+                log.info("============用户已登录，登录用户为{}============", user);
+                return user;
+            }
+        }
+        log.info("============用户未登录============");
+
+        return new TbUser();
     }
 
     //请求之后

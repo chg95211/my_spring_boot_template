@@ -31,8 +31,43 @@ public class RabbitMqConfig
     public static final String SEARCH_LOG_DIRECT_EXCHANGE = "search-log-direct-exchange";
     public static final String SEARCH_LOG_ROUTING_KEY = "search-log-routing-key";
 
+    public static final String MIAOSHA_ORDER_QUEUE = "miaosha-order-queue";
+    public static final String MIAOSHA_ORDER_DIRECT_EXCHANGE = "miaosha-order-direct-exchange";
+    public static final String MIAOSHA_ORDER_ROUTING_KEY = "miaosha-order-routing-key";
+
     //定义一个queue
     @Bean
+    Queue queue2()
+    {
+        String name = MIAOSHA_ORDER_QUEUE;
+        boolean durable = true; //持久化,防止rabbitmq挂了消息丢失
+        boolean exclusive = false; //非declarer's connection 也可以使用
+        boolean autoDelete = false; //不自动删除
+        return new Queue(name, durable, exclusive, autoDelete);
+    }
+
+    //定义一个direct交换机, routing key 完全匹配
+    @Bean("directExchange2")
+    DirectExchange directExchange2()
+    {
+        String name = MIAOSHA_ORDER_DIRECT_EXCHANGE;
+        boolean durable = true;
+        boolean autoDelete = false;
+        Map<String, Object> arguments = null;
+        return new DirectExchange(name, durable, autoDelete, arguments);
+    }
+
+
+
+    //绑定交换机和队列:完全匹配
+    @Bean("directBinding2")
+    Binding directBinding2()
+    {
+        return BindingBuilder.bind(queue2()).to(directExchange2()).with(MIAOSHA_ORDER_ROUTING_KEY);
+    }
+
+    //定义一个queue
+    @Bean("queue")
     Queue queue()
     {
         String name = SEARCH_LOG_QUEUE;
@@ -43,7 +78,7 @@ public class RabbitMqConfig
     }
 
     //定义一个direct交换机, routing key 完全匹配
-    @Bean
+    @Bean("directExchange")
     DirectExchange directExchange()
     {
         String name = SEARCH_LOG_DIRECT_EXCHANGE;
@@ -57,9 +92,9 @@ public class RabbitMqConfig
 
     //绑定交换机和队列:完全匹配
     @Bean
-    Binding directBinding(Queue queue, DirectExchange exchange)
+    Binding directBinding()
     {
-        return BindingBuilder.bind(queue).to(exchange).with(SEARCH_LOG_ROUTING_KEY);
+        return BindingBuilder.bind(queue()).to(directExchange()).with(SEARCH_LOG_ROUTING_KEY);
     }
 
 

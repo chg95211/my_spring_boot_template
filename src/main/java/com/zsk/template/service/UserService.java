@@ -13,4 +13,6 @@ public interface UserService
     TbUser getById(Long id);
     int removeById(Long id);
     TbUser getUserInfo();
+
+    TbUser getByToken(String token);
 }

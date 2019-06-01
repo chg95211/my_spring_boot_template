@@ -1,5 +1,7 @@
 package com.zsk.template.service.impl;
 
+import com.rabbitmq.http.client.domain.UserInfo;
+import com.zsk.template.config.shiro.ShiroRedisSessionDao;
 import com.zsk.template.constant.RedisKeyPrefix;
 import com.zsk.template.dao.UserDao;
 import com.zsk.template.model.TbUser;
@@ -9,12 +11,20 @@ import com.zsk.template.util.jedis.JedisClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionKey;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.Collection;
 
 /**
  * @description:
@@ -39,7 +49,7 @@ public class UserServiceImpl implements UserService
         return this.userDao.selectOneByExample(example);
     }
 
-    @Cacheable(value = "userCache", key = "'user:id:'.concat(#id)", unless="#result == null")
+    @Cacheable(value = "userCache", key = "'user:id:'.concat(#id)", unless = "#result == null")
     @Override
     public TbUser getById(Long id)
     {
@@ -108,6 +118,17 @@ public class UserServiceImpl implements UserService
         //        }
 
         return null;
+    }
+
+
+    @Override
+    public TbUser getByToken(String token)
+    {
+        SessionKey key = new DefaultSessionKey(token);
+        Session session = SecurityUtils.getSecurityManager().getSession(key);
+        Object obj = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+        SimplePrincipalCollection collection = (SimplePrincipalCollection) obj;
+        return (TbUser) collection.getPrimaryPrincipal();
     }
 
 }

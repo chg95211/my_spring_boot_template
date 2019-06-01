@@ -2,6 +2,8 @@ package com.zsk.template.config.mq;
 
 import com.rabbitmq.client.Channel;
 import com.zsk.template.model.SearchLog;
+import com.zsk.template.model.TaoMiaosha;
+import com.zsk.template.service.MiaoShaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -23,6 +25,8 @@ import java.io.IOException;
 @Component
 public class LogSearchReceiver
 {
+    @Autowired
+    private MiaoShaService miaoShaService;
 
     @RabbitListener(queues = RabbitMqConfig.SEARCH_LOG_QUEUE)
     @RabbitHandler
@@ -33,6 +37,25 @@ public class LogSearchReceiver
         log.info("[receiveLogSearchLogMsg] Save search log to es : {}", searchLog);
         try
         {
+            channel.basicAck(tag, false);//手动确认,防止消费者挂了消息丢失
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RabbitListener(queues = RabbitMqConfig.MIAOSHA_ORDER_QUEUE)
+    @RabbitHandler
+    public void receiveMiaoshaOrder(@Payload TaoMiaosha order,
+                                       @Header(AmqpHeaders.CHANNEL) Channel channel,
+                                       @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException
+    {
+        log.info("[receiveMiaoshaOrder] create orde msg : {}", order);
+        try
+        {
+            miaoShaService.doMiaosha(order);
             channel.basicAck(tag, false);//手动确认,防止消费者挂了消息丢失
         }
         catch (Exception e)
