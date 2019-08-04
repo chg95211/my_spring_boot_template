@@ -35,4 +35,61 @@
                            on ttest.id = ttest_sub.ttest_id
         where ttest.id = #{id}
     </select>
+    
+    <insert id="insert2">
+        insert into ttest(
+              <include refid="insertColumn"></include>
+        )
+        values 
+        (#{status})
+    </insert>
+
+    <select id="selectByStats">
+        select * from ttest
+        <trim prefix="where" suffixOverrides="and">
+            status = #{status} and
+        </trim>
+    </select>
+
+    <select id="selectByIdOrStatus">
+        select * from ttest
+        <where>
+            <choose>
+                <when test="id != null">
+                    and id = #{id}
+                </when>
+                <when test="status != null">
+                    and status = #{status}
+                </when>
+                <otherwise>
+                    1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <update id="updateOne">
+        update ttest
+        <set>
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+    </update>
+
+    
+    <insert id="batchInsert">
+        insert into public.ttest (id, status) values 
+    <foreach collection="ttests" index="test" separator="," open="(" close=")">
+        #{test.id},#{test.status}
+    </foreach>
+    </insert>
+    <sql id="insertColumn">
+        status
+    </sql>
+
+
 </mapper>

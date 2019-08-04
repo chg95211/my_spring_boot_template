@@ -10,24 +10,24 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/tao
     username: root
     password: zskroot
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/test
-#    username: zsk
-#    password: zskroot
+    #    driver-class-name: org.postgresql.Driver
+    #    url: jdbc:postgresql://localhost:5432/test
+    #    username: zsk
+    #    password: zskroot
     filters: stat,wall,log4j                    # druid监控
     dbcp2:
       min-idle: 5                               # 最小连接数
       initial-size: 5                           # 初始化连接数
       max-total: 5                              # 最大连接数
       max-wait-millis: 200                      # 等待链接获取的最大超时时间
-#  data:
-#    elasticsearch:
-#      cluster-name: myes
-#      cluster-nodes: localhost:9301,localhost:9302
-  #      properties:
-  #        path:
-  #          logs: ./elasticsearch/log
-  #          data: ./elasticseach/data
+  data:
+    elasticsearch:
+      cluster-name: myes
+      cluster-nodes: localhost:9301,localhost:9302
+      properties:
+        path:
+          logs: ./elasticsearch/log
+          data: ./elasticseach/data
   mail:
     host: smtp.qq.com
     username: shengkunz@qq.com
@@ -52,7 +52,7 @@ spring:
   # rabbitmq
   cache:
     jcache:
-      config: classpath:ehcache.xml
+      config: classpath:ehcache-spring.xml
   rabbitmq:
     host: 127.0.0.1
     port: 5672
@@ -78,6 +78,8 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+    #    开启二级缓存配合//@CacheNamespace使用
+    cache-enabled: true
 #mapper
 mapper:
   mappers: com.zsk.template.util.MyMapper

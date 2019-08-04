@@ -11,11 +11,13 @@ import com.zsk.template.dao.TtestSubDao;
 import com.zsk.template.model.SearchLog;
 import com.zsk.template.model.Ttest;
 import com.zsk.template.model.TtestSub;
+import com.zsk.template.service.TestService;
 import com.zsk.template.util.ResourcesUtil;
 import com.zsk.template.util.SnowflakeId;
 import com.zsk.template.util.jedis.JedisClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,8 @@ import java.util.Date;
 @Slf4j
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@WebMvcTest
+//@WebAppConfiguration
+//@WebMvcTest
 public class TestApplication
 {
 
@@ -193,4 +195,45 @@ public class TestApplication
 //    {
 //        logSearchSender.sendLogSearchLogMsg(SearchLog.builder().id(String.valueOf(snowflakeId.nextId())).q("test").date(new Date()).build());
 //    }
+
+    @Test
+    public void testSqlRef()
+    {
+        Ttest ttest = new Ttest();
+        ttest.setStatus(TtestStatus.open);
+        this.ttestDao.insert2(ttest);
+    }
+
+
+    @Autowired
+    private TestService testService;
+    /*先看二级缓存，没有再去一级缓存缓存找？？？？*/
+    @Test
+    public void testCache1()
+    {
+        //缓存失效的情况----------|
+        //                      |-----sqlsession不同。在springboot中必须用@Transactional开启一级缓存
+        //                      |-----用了不同的查询条件
+        //                      |-----两次查询之间执行增删改
+        //                      |-----手动调用sqlsession清空缓存
+//
+        testService.getById(1);
+        testService.getById(1);
+
+    }
+
+    @Test
+    public void testCache2()
+    {
+//        @CacheNamespace mapper上开启二级缓存功能，每个mapper对应一个
+//缓存失效的情况
+//          |-----mapper中flushCache=true会清空一级和二级缓存
+//          |-----useCache=false，不使用二级缓存，仍使用一级缓存
+//          |-----两次查询之间执行增删改
+
+        Ttest ttest = this.ttestDao.getTtestById(1);
+        ttestDao.getTtestById(1);
+//        this.ttestDao.getTtestByStatus("open");
+
+    }
 }

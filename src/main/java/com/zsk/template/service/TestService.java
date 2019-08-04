@@ -1,6 +1,7 @@
 package com.zsk.template.service;
 
 import com.zsk.template.model.TbUser;
+import com.zsk.template.model.Ttest;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ import java.util.List;
 public interface TestService
 {
     List<TbUser> list();
+    Ttest getById(int id);
 }

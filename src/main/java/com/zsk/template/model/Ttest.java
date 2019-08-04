@@ -3,12 +3,16 @@ package com.zsk.template.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.EnumDeserializer;
 import com.zsk.template.constant.TtestStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 //import org.springframework.data.elasticsearch.annotations.Document;
 //import org.springframework.data.elasticsearch.annotations.Field;
 //import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,9 +22,14 @@ import java.util.List;
  **/
 //@Document(indexName = "ttest",type = "ttest",shards = 1,replicas = 1,createIndex = true)
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "ttest")
-public class Ttest
+public class Ttest implements Serializable
 {
+
+    private static final long serialVersionUID = -4430640845955619171L;
     @Id
 //    @org.springframework.data.annotation.Id
     private Integer id;
