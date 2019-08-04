@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -17,9 +18,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
 @Table(name = "tb_order_item")
-public class TbOrderItem
+public class TbOrderItem implements Serializable
 {
     @Id
     private String id;

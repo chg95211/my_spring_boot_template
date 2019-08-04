@@ -1,5 +1,6 @@
 package com.zsk.template.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -127,5 +128,10 @@ public class DateUtil
     public static LocalDate minus(LocalDate date, int day)
     {
         return date.minus(day, ChronoUnit.DAYS);
+    }
+
+    public static String timestampToLocalDateTimeStr(Timestamp value)
+    {
+       return formatLocalDateTime2Str(value.toLocalDateTime());
     }
 }

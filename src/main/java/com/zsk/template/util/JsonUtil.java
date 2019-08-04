@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zsk.template.model.TbItem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 //json序列化工具类
 public class JsonUtil
@@ -99,5 +101,11 @@ public class JsonUtil
         }
 
         return list;
+    }
+
+    public static List<Map<String, Object>> objectListToMapList(List objectList)
+    {
+        String json = JsonUtil.objectToJson(objectList);
+        return JsonUtil.jsonToPojo(json, List.class);
     }
 }

@@ -20,9 +20,9 @@ import java.util.Map;
 public class RabbitMqConfig
 {
 /*
-* 简单队列：一个生产者一个消费者        |----------------默认轮询
+* 简单队列：一个生产者一个消费者                                 |----------------默认轮询
 * 工作队列：一个生产者多个消费者（一个消息同时发给一个消费者）   -----|
-*                                  |-------------能者多劳 设置prefectchCount和手动确认
+*                                                           |-------------能者多劳 设置prefectchCount和手动确认
 * 发布订阅者模式：一个生产者多个消费者（一个消息同时发给多个消费者） 多了交换机
 * 路由模式：把交换机和队列用routing key绑定
 * 主题模式：routing key有了正则表达式 #匹配一个或多个 *匹配一个
@@ -34,6 +34,18 @@ public class RabbitMqConfig
     public static final String MIAOSHA_ORDER_QUEUE = "miaosha-order-queue";
     public static final String MIAOSHA_ORDER_DIRECT_EXCHANGE = "miaosha-order-direct-exchange";
     public static final String MIAOSHA_ORDER_ROUTING_KEY = "miaosha-order-routing-key";
+
+    public static final String EXPORT_QUEUE = "export-queue";
+
+    @Bean
+    Queue queue3()
+    {
+        String name = EXPORT_QUEUE;
+        boolean durable = true; //持久化,防止rabbitmq挂了消息丢失
+        boolean exclusive = false; //非declarer's connection 也可以使用
+        boolean autoDelete = false; //不自动删除
+        return new Queue(name, durable, exclusive, autoDelete);
+    }
 
     //定义一个queue
     @Bean

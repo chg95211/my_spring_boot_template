@@ -105,6 +105,7 @@ public class ShiroConfig
         * */
         //之所以用linkedHashMap是i因为有顺序
         Map<String,String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/file/**", "authc");
         filterMap.put("/login", "anon");
         filterMap.put("/page/toLogin", "anon");
         filterMap.put("/page/unAuth", "anon");

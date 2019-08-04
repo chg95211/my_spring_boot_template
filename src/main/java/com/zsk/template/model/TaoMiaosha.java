@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -21,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tao_miaosha", schema = "tao", catalog = "")
-public class TaoMiaosha
+public class TaoMiaosha implements Serializable
 {
     @Id
     private Long id;

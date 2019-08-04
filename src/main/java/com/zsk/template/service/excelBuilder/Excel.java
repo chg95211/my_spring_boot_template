@@ -1,5 +1,6 @@
-package com.zsk.template.poi;
+package com.zsk.template.service.excelBuilder;
 
+import com.zsk.template.util.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -8,6 +9,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +25,17 @@ public class Excel
     private static final Map<String, String> TITLE_TRANSLARION = new HashMap<>();
     static
     {
-        TITLE_TRANSLARION.put("key1", "title1");
-        TITLE_TRANSLARION.put("key2", "title2");
-        TITLE_TRANSLARION.put("key3", "title3");
-        TITLE_TRANSLARION.put("key4", "title4");
+        TITLE_TRANSLARION.put("id", "id");
+        TITLE_TRANSLARION.put("title", "标题");
+        TITLE_TRANSLARION.put("sell_point", "卖点");
+        TITLE_TRANSLARION.put("price", "价格");
+        TITLE_TRANSLARION.put("num", "数量");
+        TITLE_TRANSLARION.put("barcode", "条形码");
+        TITLE_TRANSLARION.put("image", "图片");
+        TITLE_TRANSLARION.put("cid", "分类id");
+        TITLE_TRANSLARION.put("status", "状态");
+        TITLE_TRANSLARION.put("created", "创建时间");
+        TITLE_TRANSLARION.put("updated", "更新时间");
     }
 
     private Workbook workbook;
@@ -119,13 +128,38 @@ public class Excel
                 for (int i = 0; i < keys.length; i++)
                 {
                     Cell cell = row.createCell(i);
-                    cell.setCellValue(String.valueOf(data.getOrDefault(keys[i], EMPTY)));
+                    cell.setCellValue(Excel.handleData(keys[i], data.get(keys[i])));
                 }
                 rowNum++;
             }
             return this;
         }
 
+    }
+
+    private static String handleData(String key, Object value)
+    {
+        if (value == null)
+        {
+            return EMPTY;
+        }
+
+        String valueStr = value.toString();
+
+        if ("price".equals(key))
+        {
+            return String.valueOf(Long.parseLong(valueStr) / 100.0);
+        }
+        else if ("created".equals(key))
+        {
+            return DateUtil.timestampToLocalDateTimeStr(new Timestamp(Long.parseLong(valueStr)));
+        }
+        else if ("updated".equals(key))
+        {
+            return DateUtil.timestampToLocalDateTimeStr(new Timestamp(Long.parseLong(valueStr)));
+        }
+
+        return valueStr;
     }
 
 }

@@ -6,26 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
-
 
 /**
  * @description:
  * @author: zsk
- * @create: 2019-05-25 09:51
+ * @create: 2019-08-04 20:25
  **/
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Table(name = "ttest_sub", schema = "public", catalog = "test")
-public class TtestSub
+@Table(name = "tb_export", schema = "tao", catalog = "")
+public class TbExport implements Serializable
 {
     @Id
-    private Integer id;
-    private Integer ttestId;
-    private String name;
+    private Long id;
+    private Long userId;
+    private String fileName;
+    private String result;
 
-    @Transient
-    private Ttest ttest;
 }

@@ -19,21 +19,21 @@ import java.util.List;
 
 @Configuration
 //不能使用@EnableWebMvc
-@EnableWebMvc
+//@EnableWebMvc
 public class WebMvcConfig extends WebMvcConfigurerAdapter
 {
-    @Bean
-    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer()
-    {
-        return new EmbeddedServletContainerCustomizer()
-        {
-            @Override
-            public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer)
-            {
-                configurableEmbeddedServletContainer.setPort(8000);
-            }
-        };
-    }
+//    @Bean
+//    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer()
+//    {
+//        return new EmbeddedServletContainerCustomizer()
+//        {
+//            @Override
+//            public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer)
+//            {
+//                configurableEmbeddedServletContainer.setPort(8000);
+//            }
+//        };
+//    }
 
 
     @Override
