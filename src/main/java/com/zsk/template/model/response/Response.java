@@ -2,6 +2,11 @@ package com.zsk.template.model.response;
 
 
 import com.zsk.template.constant.ResponseStatus;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class Response<T> implements java.io.Serializable
 {
@@ -22,17 +27,17 @@ public class Response<T> implements java.io.Serializable
 
     public static <T> Response success(T data)
     {
-        return new Response<>(ResponseStatus.Success.status(),null, data);
+        return new Response<>(ResponseStatus.Success.status(), null, data);
     }
 
-    public static  Response fail(String message)
+    public static Response fail(String message)
     {
-        return new Response<>(ResponseStatus.Error.status(), message,null);
+        return new Response<>(ResponseStatus.Error.status(), message, null);
     }
 
     public static <T> Response custom(Integer status, String message, T data)
     {
-        return new Response<>(status,message,data);
+        return new Response<>(status, message, data);
     }
 
     public Integer getStatus()
@@ -69,5 +74,18 @@ public class Response<T> implements java.io.Serializable
     public String toString()
     {
         return "Response{" + "status=" + status + ", message='" + message + '\'' + ", data=" + data + '}';
+    }
+
+
+    public static void excel(HttpServletRequest request, HttpServletResponse response, Workbook workbook, String fileName) throws IOException
+    {
+        response.setCharacterEncoding(request.getCharacterEncoding());
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
+
+        response.flushBuffer();
     }
 }
