@@ -1,5 +1,6 @@
 package com.zsk.template.controller;
 
+import com.zsk.template.config.aop.annotation.RateLimit;
 import com.zsk.template.dao.TtestDao;
 import com.zsk.template.model.Ttest;
 import com.zsk.template.model.response.Response;
@@ -84,5 +85,12 @@ public class TestController
         return Response.success("success");
     }
 
+
+    @GetMapping("/testLimit")
+    @RateLimit(key = "#name", prefix = "TestController.testLimit", limit = "1")
+    public Response testLimit(String name)
+    {
+        return Response.success("hello," + name);
+    }
 
 }

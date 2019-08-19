@@ -6,6 +6,7 @@ import com.zsk.template.model.TbExport;
 import com.zsk.template.model.TbOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class LogSearchSender
 {
     @Autowired
-    private AmqpTemplate amqpTemplate;
+    private RabbitTemplate amqpTemplate;
 
     public void sendLogSearchLogMsg(SearchLog searchLog)
     {
@@ -38,5 +39,7 @@ public class LogSearchSender
     {
         log.info("[sendExport] create export msg : {}", export);
         this.amqpTemplate.convertAndSend(RabbitMqConfig.EXPORT_QUEUE,  export);
+//        this.amqpTemplate.setConfirmCallback();
+//        this.amqpTemplate.setReturnCallback();
     }
 }

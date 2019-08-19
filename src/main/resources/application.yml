@@ -141,4 +141,3 @@ simpleJob:
   # 总分片数和分片项
   shardingTotalCount: 2
   shardingItemParameters: 0=type0,1=type1
-
