@@ -1,7 +1,9 @@
-//package com.zsk.template.util.jedis;
+//package com.zsk.template.util.lock.redis;
 //
+//import lombok.extern.slf4j.Slf4j;
 //import org.springframework.data.redis.core.RedisCallback;
 //import org.springframework.data.redis.core.StringRedisTemplate;
+//import org.springframework.stereotype.Component;
 //import redis.clients.jedis.Jedis;
 //
 //import java.util.Collections;
@@ -11,7 +13,9 @@
 // * @author: zsk
 // * @create: 2018-09-15 10:33
 // **/
-//public class LockUtil
+//@Slf4j
+//@Component("redisLockUtil")
+//public class RedisLockUtil
 //{
 //    private static final Long RELEASE_SUCCESS = 1L;
 //    private static final String LOCK_SUCCESS = "OK";
