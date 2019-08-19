@@ -87,7 +87,7 @@ public class TestController
 
 
     @GetMapping("/testLimit")
-    @RateLimit(key = "#name", prefix = "TestController.testLimit", limit = "1")
+    @RateLimit(prefix = "TestController.testLimit", limit = "1")
     public Response testLimit(String name)
     {
         return Response.success("hello," + name);

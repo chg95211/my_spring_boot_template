@@ -43,9 +43,8 @@ public class RateLimiterAspect
     {
         Object result = null;
 
-        String key = getKeyValue(rateLimit.key() , pjp);
         String prefix = rateLimit.prefix();
-        String keyProperty = prefix + key;
+        String keyProperty = prefix;
         String limit = rateLimit.limit();
 
         RateLimiter limiter = limiters.computeIfAbsent(keyProperty, createLimiter(keyProperty, limit));
@@ -88,10 +87,4 @@ public class RateLimiterAspect
         }
     }
 
-    private String getKeyValue(String key, ProceedingJoinPoint pjp)
-    {
-        Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(method);
-        return SpelParser.getKey(key, parameterNames, pjp.getArgs());
-    }
 }

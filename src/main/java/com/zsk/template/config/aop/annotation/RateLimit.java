@@ -8,7 +8,6 @@ import java.lang.annotation.*;
 public @interface RateLimit
 {
 
-    String key();
     String prefix();
     String limit();
 
