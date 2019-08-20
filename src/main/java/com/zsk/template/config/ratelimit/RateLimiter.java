@@ -124,7 +124,7 @@ public class RateLimiter
     public Long acquire(Long tokens) throws InterruptedException
     {
         long milliToWait = this.reserve(tokens);
-        log.info("acquire for {}ms {}", milliToWait, Thread.currentThread().getName());
+//        log.info("acquire for {}ms {}", milliToWait, Thread.currentThread().getName());
         Thread.sleep(milliToWait);
         return milliToWait;
     }

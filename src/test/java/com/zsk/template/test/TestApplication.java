@@ -27,6 +27,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * @description:
@@ -246,7 +249,7 @@ public class TestApplication
         }
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start);//15s左右，加锁耗时
+        System.out.println(end - start);//13581，加锁耗时？？
 
         com.google.common.util.concurrent.RateLimiter limiter1 = com.google.common.util.concurrent.RateLimiter.create(10.0);
         for (int i = 0; i < 100; i++)
@@ -256,6 +259,34 @@ public class TestApplication
         }
 
         long end2 = System.currentTimeMillis();
-        System.out.println(end2 - end);//10s左右
+        System.out.println(end2 - end);//9906
+
+        RateLimiter limiter3 = limiterFactory.build("testRedisKey2", 10.0, 1);
+
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(100);
+        CountDownLatch latch = new CountDownLatch(100);
+        for (int i = 0; i < 100; i++)
+        {
+            Thread thread = new Thread(()->{
+                try
+                {
+                    cyclicBarrier.await();
+                    limiter3.acquire();
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }finally
+                {
+                    latch.countDown();
+                }
+
+            });
+            thread.start();
+        }
+        latch.await();
+        long end3 = System.currentTimeMillis();
+        System.out.println(end3 - end2);//10511
     }
 }
