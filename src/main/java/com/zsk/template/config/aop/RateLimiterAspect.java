@@ -87,4 +87,14 @@ public class RateLimiterAspect
         }
     }
 
+    public static void main(String[] args)
+    {
+        RateLimiter limiter = RateLimiter.create(10);
+        for (int i = 0; i < 100; i++)
+        {
+            limiter.acquire();
+            System.out.println(i + ":get lock");
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.zsk.template.util.lock.zookeeper;
 
-import com.zsk.template.util.lock.LockUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -19,10 +18,9 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 @Component("zkLockUtil")
-public class ZkLockUtil implements LockUtil
+public class ZkLockUtil
 {
     private static CuratorFramework client = null;
-    private ConcurrentHashMap<String, InterProcessMutex> lockMap = new ConcurrentHashMap<>();
 
     static
     {
@@ -32,55 +30,52 @@ public class ZkLockUtil implements LockUtil
         client.start();
     }
 
-    @Override
-    public Boolean lock(String key)
+    public InterProcessMutex lock(String key)
     {
         //创建分布式锁, 锁空间的根节点路径为key
         InterProcessMutex mutex = new InterProcessMutex(client, key);
         try
         {
             mutex.acquire();
-            lockMap.put(key, mutex);
-            log.info("获取了锁");
-            TimeUnit.SECONDS.sleep(5);
+            log.info(Thread.currentThread().getName() + ":获取了锁");
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return mutex;
     }
 
-    @Override
-    public Boolean unlock(String key)
+    public void unlock(InterProcessMutex mutex, String key)
     {
-        //创建分布式锁, 锁空间的根节点路径为key
-        InterProcessMutex mutex = lockMap.get(key);//new InterProcessMutex(client, key);
-        if(mutex == null)
-        {
-            return false;
-        }
         //完成业务流程, 释放锁
         try
         {
             mutex.release();
-            log.info("释放锁");
-            lockMap.remove(key);
+            log.info(Thread.currentThread().getName() + ":释放锁");
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
-        LockUtil lockUtil = new ZkLockUtil();
-        lockUtil.lock("/test/lock");
-        System.out.println("开始做事");
-        lockUtil.unlock("/test/lock");
+        ZkLockUtil lockUtil = new ZkLockUtil();
+        InterProcessMutex lock = null;
+        try
+        {
+            lock = lockUtil.lock("/test/lock");
+
+            System.out.println("开始做事");
+
+
+        }finally
+        {
+            lockUtil.unlock(lock, "/test/lock");
+        }
+
+
     }
 }
