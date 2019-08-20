@@ -3,36 +3,30 @@ package com.zsk.template.test;
 import com.zsk.template.Application;
 import com.zsk.template.config.exception.ParameterException;
 //import com.zsk.template.config.mq.LogSearchSender;
+import com.zsk.template.config.ratelimit.RateLimiter;
+import com.zsk.template.config.ratelimit.RateLimiterFactory;
 import com.zsk.template.constant.TtestStatus;
-import com.zsk.template.controller.TestController;
 import com.zsk.template.dao.TtestDao;
 import com.zsk.template.dao.TtestSubDao;
 //import com.zsk.template.dao.es.TTestEsDao;
-import com.zsk.template.model.SearchLog;
 import com.zsk.template.model.Ttest;
 import com.zsk.template.model.TtestSub;
 import com.zsk.template.service.TestService;
 import com.zsk.template.util.ResourcesUtil;
-import com.zsk.template.util.SnowflakeId;
 import com.zsk.template.util.jedis.JedisClient;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.CacheNamespace;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Date;
 
 /**
  * @description:
@@ -235,5 +229,33 @@ public class TestApplication
         ttestDao.getTtestById(1);
 //        this.ttestDao.getTtestByStatus("open");
 
+    }
+
+    @Autowired
+    private RateLimiterFactory limiterFactory;
+
+    @Test
+    public void testRedisRateLimiter() throws Exception
+    {
+        RateLimiter limiter = limiterFactory.build("testRedisKey", 10.0, 1);
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100; i++)
+        {
+            limiter.acquire();
+//            System.out.println(System.currentTimeMillis() + ":"  + i + ": 正在访问");
+        }
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start);//15s左右，加锁耗时
+
+        com.google.common.util.concurrent.RateLimiter limiter1 = com.google.common.util.concurrent.RateLimiter.create(10.0);
+        for (int i = 0; i < 100; i++)
+        {
+            limiter1.acquire();
+//            System.out.println(System.currentTimeMillis() + ":"  + i + ": 正在访问");
+        }
+
+        long end2 = System.currentTimeMillis();
+        System.out.println(end2 - end);//10s左右
     }
 }

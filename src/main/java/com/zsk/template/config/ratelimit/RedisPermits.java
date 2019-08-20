@@ -1,17 +1,21 @@
-package com.zsk.template.test;
+package com.zsk.template.config.ratelimit;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
  * redis令牌桶
- *
- * @author: Meng.Liu
- * @date: 2018/11/12 下午4:07
  */
 @Data
-public class RedisPermits
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RedisPermits implements Serializable
 {
 
     /**
@@ -52,10 +56,10 @@ public class RedisPermits
      *
      * @return
      */
-    public long expires()
+    public int expires()
     {
         long now = System.currentTimeMillis();
-        return 2 * TimeUnit.MINUTES.toSeconds(1) + TimeUnit.MILLISECONDS.toSeconds(Math.max(nextFreeTicketMillis, now) - now);
+        return Math.toIntExact(2 * TimeUnit.MINUTES.toSeconds(1) + TimeUnit.MILLISECONDS.toSeconds(Math.max(nextFreeTicketMillis, now) - now));
     }
 
     /**

@@ -66,15 +66,17 @@ public class ZkLockUtil
         InterProcessMutex lock = null;
         try
         {
-            lock = lockUtil.lock("/test/lock");
+            lock = lockUtil.lock("/test/lock1");
 
             System.out.println("开始做事");
 
 
         }finally
         {
-            lockUtil.unlock(lock, "/test/lock");
+            lockUtil.unlock(lock, "/test/lock1");
         }
+
+        System.out.println("结束");
 
 
     }
