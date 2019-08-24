@@ -1,5 +1,7 @@
 package com.zsk.template.test;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.*;
 import com.zsk.template.Application;
 import com.zsk.template.config.exception.ParameterException;
 //import com.zsk.template.config.mq.LogSearchSender;
@@ -30,6 +32,9 @@ import java.sql.SQLException;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @description:
@@ -37,8 +42,8 @@ import java.util.concurrent.CyclicBarrier;
  * @create: 2019-05-11 16:45
  **/
 @Slf4j
-@SpringBootTest(classes = Application.class)
-@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest(classes = Application.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 //@WebAppConfiguration
 //@WebMvcTest
 public class TestApplication
@@ -112,26 +117,26 @@ public class TestApplication
     }
 
 
-    @Test
-    public void testEnum2()
-    {
-        Ttest ttest = new Ttest();
-        ttest.setId(4);
-        ttest.setStatus(TtestStatus.closed);
-        this.ttestDao.insertSelective(ttest);
-
-    }
-
-
-    @Test
-    public void testEnum3()
-    {
-        Ttest ttest = new Ttest();
-        ttest.setId(5);
-        ttest.setStatus(TtestStatus.closed);
-        this.ttestDao.insertRecode(ttest);
-
-    }
+//    @Test
+//    public void testEnum2()
+//    {
+//        Ttest ttest = new Ttest();
+//        ttest.setId(4);
+//        ttest.setStatus(TtestStatus.closed);
+//        this.ttestDao.insertSelective(ttest);
+//
+//    }
+//
+//
+//    @Test
+//    public void testEnum3()
+//    {
+//        Ttest ttest = new Ttest();
+//        ttest.setId(5);
+//        ttest.setStatus(TtestStatus.closed);
+//        this.ttestDao.insertRecode(ttest);
+//
+//    }
 
     @Test
     public void testPostgreJson()
@@ -193,13 +198,13 @@ public class TestApplication
 //        logSearchSender.sendLogSearchLogMsg(SearchLog.builder().id(String.valueOf(snowflakeId.nextId())).q("test").date(new Date()).build());
 //    }
 
-    @Test
-    public void testSqlRef()
-    {
-        Ttest ttest = new Ttest();
-        ttest.setStatus(TtestStatus.open);
-        this.ttestDao.insert2(ttest);
-    }
+//    @Test
+//    public void testSqlRef()
+//    {
+//        Ttest ttest = new Ttest();
+//        ttest.setStatus(TtestStatus.open);
+//        this.ttestDao.insert2(ttest);
+//    }
 
 
     @Autowired
@@ -289,4 +294,44 @@ public class TestApplication
         long end3 = System.currentTimeMillis();
         System.out.println(end3 - end2);//10511
     }
+
+    @Test
+    public void testBloomFilter()
+    {
+        BloomFilter<Integer> integerBloomFilter = BloomFilter.create(Funnels.integerFunnel(), 1024 * 1024 * 32, 0.0000001d);
+        integerBloomFilter.put(1);
+        integerBloomFilter.put(2);
+        integerBloomFilter.put(3);
+
+        boolean c4 = integerBloomFilter.mightContain(4);
+        boolean c3 = integerBloomFilter.mightContain(3);
+        System.out.println(c4);
+        System.out.println(c3);
+
+    }
+
+    private static final int TOTAL = 10000;
+    private static final double FPP = 0.0005;
+
+    @Test
+    public void testMyRedisBloomFilter()
+    {
+        RedisBloomFilter redisBloomFilter = RedisBloomFilter.create(TOTAL, FPP);
+        redisBloomFilter.resetBitmap();
+
+        BloomFilter<String> bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), TOTAL, FPP);
+
+        IntStream.range(0, TOTAL).boxed().map(i -> Hashing.md5().hashInt(i).toString()).collect(toList()).forEach(s -> {
+            redisBloomFilter.put(s);
+            bloomFilter.put(s);
+        });
+
+        String str1 = Hashing.md5().hashInt(99999).toString();
+        String str2 = Hashing.md5().hashInt(9999).toString();
+        String str3 = "abcdefghijklmnopqrstuvwxyz123456";
+        System.out.println(redisBloomFilter.mightContain(str1) + ":" + bloomFilter.mightContain(str1));
+        System.out.println(redisBloomFilter.mightContain(str2) + ":" + bloomFilter.mightContain(str2));
+        System.out.println(redisBloomFilter.mightContain(str3) + ":" + bloomFilter.mightContain(str3));
+    }
+
 }
