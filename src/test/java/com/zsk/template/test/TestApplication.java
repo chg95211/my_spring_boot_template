@@ -3,6 +3,7 @@ package com.zsk.template.test;
 import com.google.common.base.Charsets;
 import com.google.common.hash.*;
 import com.zsk.template.Application;
+import com.zsk.template.config.aop.annotation.CostTime;
 import com.zsk.template.config.exception.ParameterException;
 //import com.zsk.template.config.mq.LogSearchSender;
 import com.zsk.template.config.ratelimit.RateLimiter;
@@ -29,12 +30,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * @description:
@@ -332,6 +332,224 @@ public class TestApplication
         System.out.println(redisBloomFilter.mightContain(str1) + ":" + bloomFilter.mightContain(str1));
         System.out.println(redisBloomFilter.mightContain(str2) + ":" + bloomFilter.mightContain(str2));
         System.out.println(redisBloomFilter.mightContain(str3) + ":" + bloomFilter.mightContain(str3));
+    }
+
+    public  Future<String> calculateAsync() throws InterruptedException
+    {
+        CompletableFuture<String> completableFuture = new CompletableFuture<>();
+        Executors.newCachedThreadPool().submit(() -> {
+            Thread.sleep(500);
+            completableFuture.complete("Hello");
+            return null;
+        });
+        return completableFuture;
+    }
+
+    @Test
+    public void testFuture() throws InterruptedException, ExecutionException
+    {
+        Future<String> future = calculateAsync();
+        System.out.println(future.get());
+    }
+
+    @Test
+    @CostTime
+    public void testMultiFuture() throws ExecutionException, InterruptedException
+    {
+        System.out.println("start runnning............");
+        long start = System.currentTimeMillis();
+        CompletableFuture<String> future1
+                = CompletableFuture.supplyAsync(() ->
+                {
+                    try
+                    {
+                        TimeUnit.SECONDS.sleep(5);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Hello" + Thread.currentThread().getName());
+                    return "Hello";
+                }
+        );
+        CompletableFuture<String> future2
+                = CompletableFuture.supplyAsync(() ->
+                {
+                    try
+                    {
+                        TimeUnit.SECONDS.sleep(8);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Beautiful" + Thread.currentThread().getName());
+
+                    return "Beautiful";
+                }
+        );
+        CompletableFuture<String> future3
+                = CompletableFuture.supplyAsync(() ->
+                {
+                    try
+                    {
+                        TimeUnit.SECONDS.sleep(10);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    System.out.println("World" + Thread.currentThread().getName());
+
+                    return "World";
+                }
+        );
+
+        CompletableFuture<Void> combinedFuture
+                = CompletableFuture.allOf(future1, future2, future3);
+
+
+        combinedFuture.get();
+
+        long end = System.currentTimeMillis();
+
+        System.out.println("finish run...time is " + (end-start));
+
+        assertTrue(future1.isDone());
+        assertTrue(future2.isDone());
+        assertTrue(future3.isDone());
+
+        System.out.println(future1.get());
+        System.out.println(future2.get());
+        System.out.println(future3.get());
+
+    }
+
+    @Test
+    public void testCompletableFuture1() throws ExecutionException, InterruptedException
+    {
+        CompletableFuture<String> stringCompletableFuture = new CompletableFuture<>();
+
+        new Thread(()->{
+            try
+            {
+                TimeUnit.SECONDS.sleep(5);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
+           stringCompletableFuture.complete("手动完成任务");
+        }).run();
+
+        String s = stringCompletableFuture.get();
+        System.out.println(s);
+    }
+
+    @Test
+    public void testCompletableFuture2() throws ExecutionException, InterruptedException
+    {
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            try
+            {
+                TimeUnit.SECONDS.sleep(5);
+            }
+            catch (InterruptedException e)
+            {
+                throw new IllegalStateException(e);
+            }
+            System.out.println("后台任务完成");
+        });
+
+        future.get();
+    }
+
+    @Test
+    public void testCompletableFuture3() throws ExecutionException, InterruptedException
+    {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try
+            {
+                TimeUnit.SECONDS.sleep(5);
+            }
+            catch (InterruptedException e)
+            {
+                throw new IllegalStateException(e);
+            }
+           return "后台任务完成";
+        });
+
+        String s = future.get();
+        System.out.println(s);
+    }
+
+    @Test
+    public void testCompletableFuture4() throws ExecutionException, InterruptedException
+    {
+        System.out.println("start");
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try
+            {
+                TimeUnit.SECONDS.sleep(5);
+            }
+            catch (InterruptedException e)
+            {
+                throw new IllegalStateException(e);
+            }
+            return "后台任务完成";
+        });
+
+        future.thenAccept(System.out::println);
+
+        System.out.println("主线程继续执行并且休眠10s");
+
+        TimeUnit.SECONDS.sleep(10);
+    }
+
+
+    @Test
+    public void testCompletableFuture5() throws ExecutionException, InterruptedException
+    {
+        System.out.println("start");
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try
+            {
+                TimeUnit.SECONDS.sleep(5);
+            }
+            catch (InterruptedException e)
+            {
+                throw new IllegalStateException(e);
+            }
+            return "后台任务完成";
+        });
+
+        future.thenApply(s->{
+            System.out.println(Thread.currentThread().getName() + "s");
+            return s;
+        }).thenApply(s->{
+            System.out.println(Thread.currentThread().getName() + "s");
+            return s;
+        });
+
+        System.out.println("主线程继续执行并且休眠10s");
+
+        TimeUnit.SECONDS.sleep(10);
+    }
+    
+    
+    @Test
+    public void testExcetion() throws ExecutionException, InterruptedException
+    {
+        CompletableFuture<Object> future = CompletableFuture.supplyAsync(() -> {
+                throw new IllegalArgumentException("Age can not be negative");
+        }).exceptionally(ex -> {
+            System.out.println("Oops! We have an exception - " + ex.getMessage());
+            return "Unknown!";
+        });
+
+        System.out.println(future.get());
     }
 
 }
